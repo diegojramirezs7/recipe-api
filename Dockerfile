@@ -17,6 +17,3 @@ COPY ./app /app
 # if somebody gets access, they can do whatever they want
 RUN adduser -D user
 USER user
-
-
-
