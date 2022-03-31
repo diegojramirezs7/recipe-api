@@ -1,12 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from core import models
+# translates the input and returns translation as string
 from django.utils.translation import gettext as _
 
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['id']
+    # fields shown when seeing user list
     list_display = ['email', 'name']
+    # fields that will be shown in Edit User Page
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal Info'), {'fields': ('name', )}),
@@ -17,6 +20,7 @@ class UserAdmin(BaseUserAdmin):
         (_('Important Dates'), {'fields': ('last_login', )}),
     )
 
+    # fields that will be shown in Add User Page
     add_fieldsets = (
         (None, {
             'classes': ('wide',),

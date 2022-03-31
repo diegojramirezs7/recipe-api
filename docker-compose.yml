@@ -10,7 +10,25 @@ services:
       - ./app:/app
     # sh -c means you're running a shell command
     command: >
-      sh -c "python manage.py runserver 0.0.0.0:8080"
+      sh -c "python manage.py wait_for_db && 
+             python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=app
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+    depends_on:
+      - db
+  db:
+    image: postgres:14-alpine
+    # can pass env variables like this or through a file
+    environment:
+      - POSTGRES_DB=app
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    # env_file:
+    #   - web-variables.env
 
-# to create django app, run:
-# docker-compose run app sh -c "django-admin startproject app ."
+    # to create django app, run:
+    # docker-compose run app sh -c "django-admin startproject app ."
