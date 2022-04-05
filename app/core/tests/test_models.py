@@ -1,5 +1,11 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from core.models import Tag
+
+
+def sample_user(email='diego@oxd.com', password='MyPassword123'):
+    """create a sample user"""
+    return get_user_model().objects.create_user(email, password)
 
 
 class ModelTests(TestCase):
@@ -28,7 +34,7 @@ class ModelTests(TestCase):
         with self.assertRaises(ValueError):
             get_user_model().objects.create_user(None, 'MyPassword123')
 
-    def test_create_new_superusre(self):
+    def test_create_new_superuser(self):
         user = get_user_model().objects.create_superuser(
             'test@tradespecifix.com',
             'MyPassword123'
@@ -36,6 +42,15 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+    def test_tag_str(self):
+        """Test the tag string representation"""
+        tag = Tag.objects.create(
+            user=sample_user(),
+            name='Diego R'
+        )
+
+        self.assertEqual(str(tag), tag.name)
 
 
 #  docker-compose run app sh -c "python manage.py test"
