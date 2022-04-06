@@ -14,8 +14,9 @@ class BaseRecipeAttrViewSet(viewsets.GenericViewSet,
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
 
-    def queryset(self):
+    def get_queryset(self):
         """return objects for currently authenticated user only"""
+        print("running")
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
     def perform_create(self, serializer):
