@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from core.models import Tag, Ingredient, Recipe
+from core.models import Tag, Ingredient, Recipe, recipe_image_file_path
+from unittest.mock import patch
 
 
 def sample_user(email='diego@oxd.com', password='MyPassword123'):
@@ -71,6 +72,18 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(str(recipe), recipe.title)
+    
+    @patch('uuid.uuid4')
+    def test_recipe_file_name_uuid(self, mock_uuid4):
+        """Test that image is saved in correct location"""
+        uuid = 'test-uuid'
+        mock_uuid4.return_value = uuid
+        file_path = recipe_image_file_path(None, 'myimage.jpg')
+
+        exp_path = f"uploads/recipe/{uuid}.jpg"
+        self.assertEqual(file_path, exp_path)
+
+
 
 
 #  docker-compose run app sh -c "python manage.py test"
